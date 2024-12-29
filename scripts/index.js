@@ -6,7 +6,7 @@ function createCard(element, deleteCard) {
   const templateCardCopy = templateCard.cloneNode("true");
   templateCardCopy.querySelector(".card__title").textContent = element.name;
   templateCardCopy.querySelector(".card__image").src = element.link;
-  templateCardCopy.querySelector(".card__image").src = element.link;
+  templateCardCopy.querySelector(".card__image").alt = element.link;
   templateCardCopy
     .querySelector(".card__delete-button")
     .addEventListener("click", deleteCard);
@@ -14,7 +14,7 @@ function createCard(element, deleteCard) {
 }
 
 function deleteCard(element) {
-  const deleteCard = element.target.closest(".card");
+  const deleteCard = element.target.closest(".card");``
   deleteCard.remove();
 }
 
