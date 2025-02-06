@@ -55,7 +55,7 @@ function handleCardFormSubmit(evt) {
         alt: nameCardValue
     }, deleteCard, handleLikeClick, handleOpenImage);
 
-    list.prepend(newCard);
+    placesList.prepend(newCard);
 
     closeModal(popupCard);
     formCardElement.reset();
