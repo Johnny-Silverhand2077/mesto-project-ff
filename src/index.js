@@ -5,17 +5,23 @@ import {createCard, deleteCard, placesList, handleLikeClick} from "./components/
  
 const popupCard = document.querySelector('.popup_type_new-card');
 const popupAddCard = document.querySelector('.profile__add-button');
+
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupButtonEdit = document.querySelector('.profile__edit-button');
+
 const profileTitleElement = document.querySelector('.profile__title');
 const profileDescriptionElement = document.querySelector('.profile__description');
-const formElement = document.forms['edit-profile'];
-const nameInput = formElement.elements.name;
-const descriptionInput = formElement.elements.description;
+
+const formEditProfile = document.forms['edit-profile'];
+const nameInput = formEditProfile.elements.name;
+const descriptionInput = formEditProfile.elements.description;
+
 const formCardElement = document.forms['new-place'];
 const nameCardInput = formCardElement.elements['place-name'];
 const linkCardInput = formCardElement.elements.link;
+
 const closeButtons = document.querySelectorAll('.popup__close');
+
 const popupImage = document.querySelector('.popup_type_image');
 const imageElement = document.querySelector('.popup__image');
 const captionElement = document.querySelector('.popup__caption');
@@ -71,7 +77,7 @@ function handleFormSubmit(evt) {
 
 
 
-formElement.addEventListener('submit', handleFormSubmit);
+formEditProfile.addEventListener('submit', handleFormSubmit);
 popupAddCard.addEventListener('click', function () {
     openModal(popupCard);
 });
