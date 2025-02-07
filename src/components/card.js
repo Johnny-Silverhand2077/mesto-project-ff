@@ -1,8 +1,6 @@
 
 
 const template = document.querySelector('#card-template').content;
-const placesContainer = document.querySelector('.places');
-const placesList = placesContainer.querySelector('.places__list');
 
 function createCard (element, deleteCard, handleLikeClick, handleOpenImage) {
     const templateCopy = template.cloneNode(true).querySelector('.card');
@@ -33,4 +31,4 @@ function handleLikeClick(evt) {
     }
 }
 
-export {createCard, deleteCard, placesList, handleLikeClick};
+export {createCard, deleteCard, handleLikeClick};

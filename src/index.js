@@ -1,7 +1,10 @@
 import "./styles/index.css"; 
 import {initialCards} from "./cards.js"; 
 import {closeModal, openModal} from "./components/modal.js"; 
-import {createCard, deleteCard, placesList, handleLikeClick} from "./components/card.js"; 
+import {createCard, deleteCard, handleLikeClick} from "./components/card.js"; 
+
+const placesContainer = document.querySelector('.places');
+const placesList = placesContainer.querySelector('.places__list');
  
 const popupCard = document.querySelector('.popup_type_new-card');
 const popupAddCard = document.querySelector('.profile__add-button');
