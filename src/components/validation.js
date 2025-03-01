@@ -1,46 +1,49 @@
-function hasInvalidInput(inputlist) {
-  inputlist.some((input) => !input.validity.valid);
-}
+const hasInvalidInput = (inputList) =>
+  inputList.some((input) => !input.validity.valid);
 
-function showinputError(
+const showInputError = ({
   formElement,
   inputElement,
   inputErrorClass,
   errorClass,
-  errorMessage
-) {
+  errorMessage,
+}) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+
   errorElement.classList.add(errorClass);
   errorElement.textContent = errorMessage;
+
   inputElement.classList.add(inputErrorClass);
-}
+};
 
-function hideInputError(
+const hideInputError = ({
   formElement,
   inputElement,
   inputErrorClass,
-  errorClass
-) {
-  const errorElement = formElement.querySelector(`${inputElement.id}-error`);
+  errorClass,
+}) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+
   errorElement.classList.remove(errorClass);
-  errorClass.textContent = "";
-  inputElement.classList.remove(inputErrorClass);
-}
+  errorElement.textContent = '';
 
-function checkInputValidity(
+  inputElement.classList.remove(inputErrorClass);
+};
+
+const checkInputValidity = ({
   formElement,
   inputElement,
   inputErrorClass,
-  errorClass
-) {
+  errorClass,
+}) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
-    inputElement.setCustomValidity("");
+    inputElement.setCustomValidity('');
   }
 
   if (!inputElement.validity.valid) {
-    showinputError({
+    showInputError({
       formElement,
       inputElement,
       errorMessage: inputElement.validationMessage,
@@ -55,30 +58,30 @@ function checkInputValidity(
       inputErrorClass,
     });
   }
-}
+};
 
-function toggleButtonState(
+const toggleButtonState = ({
   inputList,
   submitButtonElement,
-  inactiveButtonClass
-) {
+  inactiveButtonClass,
+}) => {
   if (hasInvalidInput(inputList)) {
-    submitButtonElement.disable = true;
+    submitButtonElement.disabled = true;
     submitButtonElement.classList.add(inactiveButtonClass);
   } else {
-    submitButtonElement.disable = false;
+    submitButtonElement.disabled = false;
     submitButtonElement.classList.remove(inactiveButtonClass);
   }
-}
+};
 
-function setEventListener(
+const setEventListeners = ({
   formElement,
   inputSelector,
   inputErrorClass,
   submitButtonSelector,
   inactiveButtonClass,
-  errorClass
-) {
+  errorClass,
+}) => {
   const inputList = [...formElement.querySelectorAll(inputSelector)];
   const submitButtonElement = formElement.querySelector(submitButtonSelector);
 
@@ -87,8 +90,9 @@ function setEventListener(
     submitButtonElement,
     inactiveButtonClass,
   });
+
   inputList.forEach((inputElement) => {
-    inputElement.addEventListener("input", () => {
+    inputElement.addEventListener('input', () => {
       checkInputValidity({
         formElement,
         inputElement,
@@ -102,22 +106,24 @@ function setEventListener(
       });
     });
   });
-}
+};
 
-function enableValidation(
+const enableValidation = ({
   formSelector,
   inputSelector,
   submitButtonSelector,
   inactiveButtonClass,
   inputErrorClass,
-  errorClass
-) {
+  errorClass,
+}) => {
   const formList = document.querySelectorAll(formSelector);
+
   formList.forEach((formElement) => {
-    formElement.addEventListener("submit", (evt) => {
-      evt.preventDefault();
+    formElement.addEventListener('submit', (event) => {
+      event.preventDefault();
     });
-    setEventListener({
+
+    setEventListeners({
       formElement,
       inputSelector,
       submitButtonSelector,
@@ -126,9 +132,9 @@ function enableValidation(
       errorClass,
     });
   });
-}
+};
 
-function clearValidation(
+const clearValidation = (
   formElement,
   {
     submitButtonSelector,
@@ -137,7 +143,7 @@ function clearValidation(
     inputErrorClass,
     errorClass,
   }
-) {
+) => {
   const inputList = [...formElement.querySelectorAll(inputSelector)];
   const submitButtonElement = formElement.querySelector(submitButtonSelector);
 
@@ -146,14 +152,15 @@ function clearValidation(
       formElement,
       inputElement,
       inputErrorClass,
-      error,
+      errorClass,
     });
   });
+
   toggleButtonState({
     inputList,
     submitButtonElement,
     inactiveButtonClass,
   });
-}
+};
 
-export { enableValidation, clearValidation }
+export { enableValidation, clearValidation };
