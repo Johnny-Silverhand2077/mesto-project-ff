@@ -1,111 +1,93 @@
-const CONFIG = {
-  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-33',
+const config = {
+  baseUrl: `https://nomoreparties.co/v1/wff-cohort-33`,
   headers: {
-    authorization: '8e006fda-5d15-4d58-9886-d6a87150c44c',
-    'Content-Type': 'application/json',
+    authorization: "8e006fda-5d15-4d58-9886-d6a87150c44c",
+    "Content-Type": "application/json",
   },
 };
 
-const handleResponse = (response) => {
-  if (response.ok) {
-    return response.json();
+function handleResponse(res)  {
+  if (res.ok) {
+    return res.json();
   }
 
-  return Promise.reject(`Ошибка: ${response.status}`);
+  return Promise.reject(`Ошибка: ${res.status}`);
 };
 
-const checkImageUrl = (url) => {
-  return fetch((url), {
-    method: 'HEAD',
-  }).then(({ ok, headers, status }) => {
-    if (ok) {
-      if (headers.get('Content-Type').includes('image')) {
-        return Promise.resolve();
-      }
-
-      return Promise.reject('Ошибка: URL ссылается на не изображение');
-    }
-
-    return Promise.reject(`Ошибка: ${status}`);
-  });
-};
-
-const getInitialCards = () => {
-  return fetch(`${CONFIG.baseUrl}/cards`, { headers: CONFIG.headers }).then(
-    handleResponse
+function getUserInfo() {
+  return fetch(`${config.baseUrl}/users/me`, { headers: config.headers }).then(
+    (res) => handleResponse(res)
   );
-};
+}
 
-const createCard = ({ name, link }) => {
-  return checkImageUrl(link).then(() =>
-    fetch(`${CONFIG.baseUrl}/cards`, {
-      headers: CONFIG.headers,
-      method: 'POST',
-      body: JSON.stringify({
-        name,
-        link,
-      }),
-    }).then(handleResponse)
-  );
-};
+function getInitialCards() {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers,
+  }).then((res) => handleResponse(res));
+}
 
-const deleteCard = (cardId) => {
-  return fetch(`${CONFIG.baseUrl}/cards/${cardId}`, {
-    headers: CONFIG.headers,
-    method: 'DELETE',
-  }).then(handleResponse);
-};
 
-const likeCard = (cardId) => {
-  return fetch(`${CONFIG.baseUrl}/cards/likes/${cardId}`, {
-    headers: CONFIG.headers,
-    method: 'PUT',
-  }).then(handleResponse);
-};
 
-const unLikeCard = (cardId) => {
-  return fetch(`${CONFIG.baseUrl}/cards/likes/${cardId}`, {
-    headers: CONFIG.headers,
-    method: 'DELETE',
-  }).then(handleResponse);
-};
-
-const getUserInfo = () => {
-  return fetch(`${CONFIG.baseUrl}/users/me`, { headers: CONFIG.headers }).then(
-    handleResponse
-  );
-};
-
-const updateUserInfo = ({ name, description }) => {
-  return fetch(`${CONFIG.baseUrl}/users/me`, {
-    headers: CONFIG.headers,
-    method: 'PATCH',
+function editProfile(profileName, profileAbout) {
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: config.headers,
     body: JSON.stringify({
-      name,
-      about: description,
+      name: profileName,
+      about: profileAbout,
     }),
-  }).then(handleResponse);
-};
+  }).then((res) => handleResponse(res));
+}
 
-const updateUserAvatar = (url) => {
-  return checkImageUrl(url).then(() =>
-    fetch(`${CONFIG.baseUrl}/users/me/avatar`, {
-      headers: CONFIG.headers,
-      method: 'PATCH',
-      body: JSON.stringify({
-        avatar: url,
-      }),
-    }).then(handleResponse)
-  );
-};
+function updateUserAvatar(avatarLink) {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: avatarLink,
+    }),
+  }).then((res) => handleResponse(res));
+}
+
+function createNewCard(cardName, cardLink) {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: "POST",
+    headers: config.headers,
+    body: JSON.stringify({
+      name: cardName,
+      link: cardLink,
+    }),
+  }).then((res) => handleResponse(res));
+}
+
+function removeCard(cardID) {
+  return fetch(`${config.baseUrl}/cards/${cardID}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then((res) => handleResponse(res));
+}
+
+function likeCard(cardID) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardID}`, {
+    method: "PUT",
+    headers: config.headers,
+  }).then((res) => handleResponse(res));
+}
+
+function unLikeCard(cardID) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardID}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then((res) => handleResponse(res));
+}
 
 export {
+  getUserInfo,
   getInitialCards,
-  createCard,
-  deleteCard,
+  editProfile,
+  updateUserAvatar,
+  createNewCard,
+  removeCard,
   likeCard,
   unLikeCard,
-  getUserInfo,
-  updateUserInfo,
-  updateUserAvatar,
 };

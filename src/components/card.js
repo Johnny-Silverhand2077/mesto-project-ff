@@ -1,62 +1,80 @@
+import { removeCard, likeCard, unLikeCard } from "./api";
 
-const createCard = ({
-    currentUserId,
-    template,
-    data,
-    onDelete,
-    onLike,
-    onImageClick,
-  }) => {
-    const element = template.querySelector('.card').cloneNode(true);
+const template = document.querySelector("#card-template").content;
+
+function createCard(
+  element, 
+  deleteCard,
+  handleLikeClick,
+  handleOpenImage,
+  userId
+) {
+  const templateCopy = template.cloneNode(true).querySelector(".card");
+  const cardImage = templateCopy.querySelector(".card__image");
+  const cardTitle = templateCopy.querySelector(".card__title");
+  const deleteButton = templateCopy.querySelector(".card__delete-button");
+  const likeButton = templateCopy.querySelector(".card__like-button");
+  const likeCounter = templateCopy.querySelector('.card__like-counter')
   
-    const image = element.querySelector('.card__image');
-    image.addEventListener('click', () =>
-      onImageClick({
-        cardName: data.name,
-        cardLink: data.link,
-      })
-    );
-    image.src = data.link;
-    image.alt = data.name;
+
+  likeCounter.textContent = element.likes.length;
+
+  cardTitle.textContent = element.name;
+  cardImage.src = element.link;
+  cardImage.alt = element.name;
+
+  cardImage.addEventListener("click", () =>
+    handleOpenImage(cardImage.src, cardTitle.textContent)
+  );
+
   
-    element.querySelector('.card__title').textContent = data.name;
-  
-    const counter = element.querySelector('.card__like-counter');
-  
-    if (data.likes.length) {
-      counter.classList.add('card__like-counter_is-active');
-      counter.textContent = data.likes.length;
-    }
-  
-    const deleteButton = element.querySelector('.card__delete-button');
-  
-    if (data.owner['_id'] === currentUserId) {
-      deleteButton.classList.add('card__delete-button_is-active');
-      deleteButton.addEventListener('click', () => {
-        onDelete({
-          cardId: data['_id'],
-          cardElement: element,
-          buttonElement: deleteButton,
-        });
-      });
-    }
-  
-    const likeButton = element.querySelector('.card__like-button');
-  
-    if (data.likes.find((element) => element['_id'] === currentUserId)) {
-      likeButton.classList.add('card__like-button_is-active');
-    }
-  
-    likeButton.addEventListener('click', () => {
-      onLike({
-        cardId: data['_id'],
-        buttonElement: likeButton,
-        counterElement: counter,
-      });
+
+  if (element.owner._id === userId) {
+    
+    deleteButton.addEventListener("click", (evt) => {
+      deleteCard(evt, element._id);
     });
-  
-    return element;
-  };
-  
-  export { createCard };
-  
+  } else {
+    deleteButton.remove();
+  }
+
+  const isUserLike = element.likes.some((item) => {
+    return item._id === userId;
+  });
+  if (isUserLike) {
+    likeButton.classList.add("card__like-button_is-active");
+  }
+  likeButton.addEventListener("click", (evt) =>
+    handleLikeClick(evt, element._id)
+  );
+
+  return templateCopy;
+}
+
+function deleteCard(element, cardId) {
+  const item = element.target.closest(".card");
+  removeCard(cardId)
+    .then(() => {
+      item.remove();
+    })
+    .catch((err) => console.log(err));
+}
+
+function handleLikeClick(evt, cardId) {
+  const item = evt.target.closest(".card");
+  const likeCount = item.querySelector(".card__like-counter");
+  if (evt.target.classList.contains("card__like-button_is-active")) {
+    unLikeCard(cardId).then((res) => {
+      evt.target.classList.remove("card__like-button_is-active");
+      likeCount.textContent = res.likes.length;
+    });
+  } else {
+    likeCard(cardId).then((res) => {
+      evt.target.classList.add("card__like-button_is-active");
+      likeCount.textContent = res.likes.length;
+      
+    });
+  }
+}
+
+export { createCard, deleteCard, handleLikeClick };
