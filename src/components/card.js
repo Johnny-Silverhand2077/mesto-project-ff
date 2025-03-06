@@ -64,16 +64,19 @@ function handleLikeClick(evt, cardId) {
   const item = evt.target.closest(".card");
   const likeCount = item.querySelector(".card__like-counter");
   if (evt.target.classList.contains("card__like-button_is-active")) {
-    unLikeCard(cardId).then((res) => {
+    unLikeCard(cardId)
+    .then((res) => {
       evt.target.classList.remove("card__like-button_is-active");
       likeCount.textContent = res.likes.length;
-    });
+    })
+    .catch((err) => console.log(err))
   } else {
     likeCard(cardId).then((res) => {
       evt.target.classList.add("card__like-button_is-active");
       likeCount.textContent = res.likes.length;
       
-    });
+    })
+    .catch((err) => console.log(err))
   }
 }
 

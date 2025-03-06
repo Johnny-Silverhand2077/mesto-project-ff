@@ -5,7 +5,6 @@ import { createCard, deleteCard, handleLikeClick } from "./components/card.js";
 import {
   enableValidation,
   clearValidation,
-  validationConfig,
 } from "./components/validation.js";
 import {
   getUserInfo,
@@ -43,6 +42,15 @@ const profileAvatarSubmitbutton =
   profileAvatarForm.querySelector(".popup__button");
 const popupAvatar = document.querySelector(".popup_type_edit-avatar");
 const popupAvatarInput = document.querySelector(".popup__input_type_url");
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
 
 let userId;
 
@@ -92,8 +100,8 @@ function handleFormSubmit(evt) {
   renderLoading(formEditSubmitButton, true);
   editProfile(nameInput.value, descriptionInput.value)
     .then((res) => {
-      profileTitleElement.textContent = nameInput.value;
-      profileDescriptionElement.textContent = descriptionInput.value;
+      profileTitleElement.textContent = res.value;
+      profileDescriptionElement.textContent = res.value;
       closeModal(popupEdit);
     })
     .catch((err) => console.log(err))
@@ -130,6 +138,7 @@ popupButtonEdit.addEventListener("click", function () {
   openModal(popupEdit);
   nameInput.value = profileTitleElement.textContent;
   descriptionInput.value = profileDescriptionElement.textContent;
+  clearValidation(popupEdit, validationConfig)
 });
 
 closeButtons.forEach(function (button) {

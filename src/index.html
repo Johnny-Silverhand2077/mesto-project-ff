@@ -36,7 +36,7 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="popup__form" name="edit-profile">
+          <form class="popup__form" name="edit-profile" novalidate>
             <input
               type="text"
               name="name"
@@ -50,7 +50,6 @@
               required
             />
             <span class="name-input-error popup__error"></span>
-            <span class="form__input-error email-input-error"></span>
             <input
               type="text"
               name="description"
@@ -63,8 +62,7 @@
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               required
             />
-            <span class="description-input-error popup__error"></span>
-            <span class="form__input-error email-input-error"></span>
+            <span class="description-input-error popup__error"></span>    
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -75,7 +73,7 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Обновить аватар</h3>
-          <form class="popup__form" name="edit-avatar">
+          <form class="popup__form" name="edit-avatar" novalidate>
             <input
               type="url"
               name="avatar"
@@ -95,7 +93,7 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Новое место</h3>
-          <form class="popup__form" name="new-place">
+          <form class="popup__form" name="new-place" novalidate>
             <input
               type="text"
               name="place-name"
@@ -106,7 +104,7 @@
               maxlength="30"
               pattern="[A-Za-zА-Яа-яЁё]+([\s\-][A-Za-zА-Яа-яЁё]+)*"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
-              required
+              required          
             />
             <span class="place-name-input-error popup__error"></span>
             <input

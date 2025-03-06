@@ -1,11 +1,4 @@
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-}
+
 
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
@@ -15,32 +8,32 @@ function hasInvalidInput(inputList) {
 }
 
 function showInputError(formElement, inputElement, errorMessage, validationConfig) {
-  const errorElement = formElement.querySelector(`.${inputElement.name}-input-error`);
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(validationConfig.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(validationConfig.errorClass);
 }
 
 function hideInputError(formElement, inputElement, validationConfig) {
-  const errorElement = formElement.querySelector(`.${inputElement.name}-input-error`);
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(validationConfig.inputErrorClass);
   errorElement.classList.remove(validationConfig.errorClass);
   errorElement.textContent = "";
 }
 
-function checkInputValidity(formElement, inputElement, validationConfig) {
-  if (inputElement.validity.patternMistmach) {
+function checkInputValidity(formElement, inputElement,  validationConfig) {
+  if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
     inputElement.setCustomValidity("");
   }
 
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
+    showInputError(formElement, inputElement, inputElement.validationMessage,  validationConfig);
   } else {
     hideInputError(formElement, inputElement, validationConfig);
-  }
-}
+  
+}}
 
 function toggleButtonState(inputList, buttonElement, validationConfig) {
   if (hasInvalidInput(inputList)) {
@@ -70,6 +63,7 @@ function enableValidation(validationConfig) {
 }
 
 function clearValidation(formElement, validationConfig) {
+  
   const inputList = Array.from(
     formElement.querySelectorAll(validationConfig.inputSelector)
   );
@@ -82,4 +76,4 @@ function clearValidation(formElement, validationConfig) {
   toggleButtonState(inputList, buttonElement, validationConfig);
 }
 
-export {enableValidation, clearValidation, validationConfig}
+export {enableValidation, clearValidation}
